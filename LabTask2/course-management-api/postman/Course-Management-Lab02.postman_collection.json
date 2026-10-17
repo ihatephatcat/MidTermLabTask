@@ -1,0 +1,779 @@
+{
+  "info": {
+    "name": "AWT Lab Task 02 - Course Management API",
+    "description": "Seven routes and valid/invalid validation and upload scenarios. Set file variables to absolute local paths before running upload requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "courseId",
+      "value": "5"
+    },
+    {
+      "key": "pdfFile",
+      "value": ""
+    },
+    {
+      "key": "jpgFile",
+      "value": ""
+    },
+    {
+      "key": "txtFile",
+      "value": ""
+    },
+    {
+      "key": "exeFile",
+      "value": ""
+    },
+    {
+      "key": "oversizedFile",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "List courses",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/course"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fetch course",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/course/{{courseId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create course",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/course",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"NestJS Fundamentals\",\n  \"code\": \"CS101\",\n  \"instructor\": \"John Doe\",\n  \"credits\": 3\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create with description",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/course",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"NestJS Fundamentals\",\n  \"code\": \"CS101\",\n  \"instructor\": \"John Doe\",\n  \"credits\": 3,\n  \"description\": \"Introduction to NestJS\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transform string credits",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/course",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"NestJS Fundamentals\",\n  \"code\": \"CS101\",\n  \"instructor\": \"John Doe\",\n  \"credits\": \"3\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update course with PartialType",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/course/{{courseId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"NestJS Advanced\",\n  \"code\": \"CS201\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Patch course",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/course/{{courseId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"NestJS Advanced\",\n  \"credits\": 4\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete course",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/course/{{courseId}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () { pm.response.to.have.status(200); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Empty name",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/course",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"\",\n  \"code\": \"CS101\",\n  \"instructor\": \"John Doe\",\n  \"credits\": 3\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Blank name",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/course",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"   \",\n  \"code\": \"CS101\",\n  \"instructor\": \"John Doe\",\n  \"credits\": 3\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Credits above maximum",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/course",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"NestJS Fundamentals\",\n  \"code\": \"CS101\",\n  \"instructor\": \"John Doe\",\n  \"credits\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Credits below minimum",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/course",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"NestJS Fundamentals\",\n  \"code\": \"CS101\",\n  \"instructor\": \"John Doe\",\n  \"credits\": 0\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Unknown field",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/course",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"NestJS Fundamentals\",\n  \"code\": \"CS101\",\n  \"instructor\": \"John Doe\",\n  \"credits\": 3,\n  \"extra\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Invalid name type",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/course",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": 5,\n  \"code\": \"CS101\",\n  \"instructor\": \"John Doe\",\n  \"credits\": 3\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Invalid credits type",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/course",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"NestJS Fundamentals\",\n  \"code\": \"CS101\",\n  \"instructor\": \"John Doe\",\n  \"credits\": \"many\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Invalid description",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/course",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"NestJS Fundamentals\",\n  \"code\": \"CS101\",\n  \"instructor\": \"John Doe\",\n  \"credits\": 3,\n  \"description\": 5\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Missing required fields",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/course",
+        "body": {
+          "mode": "raw",
+          "raw": "{}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Invalid partial update",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/course/{{courseId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \" \",\n  \"credits\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Upload valid PDF",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{baseUrl}}/course/{{courseId}}/upload",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "{{pdfFile}}"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Upload valid JPG",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{baseUrl}}/course/{{courseId}}/upload",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "{{jpgFile}}"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () { pm.response.to.have.status(201); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reject TXT",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{baseUrl}}/course/{{courseId}}/upload",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "{{txtFile}}"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reject EXE",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{baseUrl}}/course/{{courseId}}/upload",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "{{exeFile}}"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reject file larger than 2 MB",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{baseUrl}}/course/{{courseId}}/upload",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "{{oversizedFile}}"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Missing uploaded file",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{baseUrl}}/course/{{courseId}}/upload"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 400\", function () { pm.response.to.have.status(400); });",
+              "pm.test(\"JSON response has a message\", function () { pm.expect(pm.response.json()).to.have.property(\"message\"); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
