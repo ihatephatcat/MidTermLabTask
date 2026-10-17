@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 
@@ -31,5 +31,19 @@ export class CourseService {
 
   deleteCourse(id: string) {
     return { message: 'Course deleted successfully', id };
+  }
+
+  uploadCourseMaterial(id: string, file: Express.Multer.File) {
+    if (!file) {
+      throw new BadRequestException(
+        'A material file is required in the file field',
+      );
+    }
+    return {
+      message: 'Material uploaded successfully',
+      courseId: id,
+      filename: file.filename,
+      path: `src/uploads/${file.filename}`,
+    };
   }
 }

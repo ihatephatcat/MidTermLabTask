@@ -73,4 +73,20 @@ describe('CourseService', () => {
       id: '5',
     });
   });
+
+  it('rejects a missing course material', () => {
+    expect(() => service.uploadCourseMaterial('5', undefined!)).toThrow(
+      'A material file is required in the file field',
+    );
+  });
+
+  it('returns the stored material metadata', () => {
+    const file = { filename: 'generated.pdf' } as Express.Multer.File;
+    expect(service.uploadCourseMaterial('5', file)).toEqual({
+      message: 'Material uploaded successfully',
+      courseId: '5',
+      filename: 'generated.pdf',
+      path: 'src/uploads/generated.pdf',
+    });
+  });
 });
