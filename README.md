@@ -8,6 +8,7 @@ Midterm lab tasks for Advanced Programming with Web Technology (AWT).
 | ----------- | -------------------------- | ------------------ |
 | Lab Task 01 | Course Management REST API | NestJS, TypeScript |
 | Lab Task 02 | Course Validation and Material Upload API | NestJS, DTOs, Multer |
+| Lab Task 03 | University System API | NestJS, Dependency Injection, forwardRef |
 
 ## Repository Structure
 
@@ -17,6 +18,8 @@ MidTermLabTask/
 │   └── course-management-api/
 ├── LabTask2/
 │   └── course-management-api/
+├── LabTask3/
+│   └── university-system-api/
 └── README.md
 ```
 
@@ -39,3 +42,14 @@ collection. Course CRUD does not use persistent storage.
 
 See [Lab Task 02 instructions](LabTask2/course-management-api/README.md) and
 [verification results](LabTask2/course-management-api/VERIFICATION.md).
+
+## Lab Task 03
+
+A fresh, standalone University System API demonstrating intra-module DI
+(CourseController and CourseService), inter-module DI (EnrollmentService uses
+CourseService), and circular DI (EnrollmentService and NotificationService use
+each other through `forwardRef()`). Includes seven HTTP endpoints, Jest and
+Supertest tests, and a Postman collection verified with Newman.
+
+See [Lab Task 03 instructions](LabTask3/university-system-api/README.md) and
+[verification results](LabTask3/university-system-api/VERIFICATION.md).

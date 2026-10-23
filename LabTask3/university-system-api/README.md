@@ -1,98 +1,245 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# UniversitySystemAPI - Lab Task 03
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A standalone NestJS application for AWT Lab Task 03: Dependency Injection.
+It demonstrates intra-module, inter-module, and circular dependencies through
+CourseModule, EnrollmentModule, and NotificationModule.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+The implementation follows the lab PDF and the faculty's university management
+lecture example: thin controllers, injectable services, constructor injection,
+and explicit module imports/exports. There is no database or persistent storage.
+Course and enrollment lists always return `data: []`. Notifications are returned
+confirmation objects; no email or external message is sent.
 
-## Description
+## Setup and execution
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Use Node.js 24 and npm. Verified with Node.js 24.19.0 and npm 12.0.2.
 
-## Project setup
+From the repository root:
 
-```bash
-$ npm install
+```powershell
+cd LabTask3/university-system-api
+npm ci
+npm run start:dev
 ```
 
-## Compile and run the project
+The default URL is `http://localhost:3000`. To run the compiled application:
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```powershell
+npm run build
+npm run start:prod
 ```
 
-## Run tests
+An optional `PORT` environment variable changes the port. In PowerShell:
 
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+```powershell
+$env:PORT = '3103'
+npm run start:prod
 ```
 
-## Deployment
+Run all npm commands inside this project. Its package.json, lockfile, Nest
+configuration, and dependencies are independent of LabTask1 and LabTask2.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## Project structure
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+```text
+university-system-api/
+|-- src/
+|   |-- course/
+|   |   |-- course.module.ts
+|   |   |-- course.controller.ts
+|   |   |-- course.service.ts
+|   |   |-- course.controller.spec.ts
+|   |   `-- course.service.spec.ts
+|   |-- enrollment/             # Same module/controller/service/test layout
+|   |-- notification/           # Same module/controller/service/test layout
+|   |-- app.module.ts
+|   `-- main.ts
+|-- test/
+|   |-- app.e2e-spec.ts
+|   `-- jest-e2e.json
+|-- postman/
+|   `-- UniversitySystemAPI.postman_collection.json
+|-- package.json
+|-- package-lock.json
+|-- nest-cli.json
+|-- tsconfig.json
+|-- tsconfig.build.json
+`-- VERIFICATION.md
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+The NestJS CLI created the fresh project and all three modules, controllers,
+and services. The initialization command was:
 
-## Resources
+```text
+nest new UniversitySystemAPI --directory LabTask3/university-system-api --package-manager npm --skip-git --skip-install
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+Inside the generated project, the CLI commands were:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```text
+nest generate module course
+nest generate controller course
+nest generate service course
+nest generate module enrollment
+nest generate controller enrollment
+nest generate service enrollment
+nest generate module notification
+nest generate controller notification
+nest generate service notification
+```
 
-## Support
+## Dependency injection
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+| Part | Dependency | Configuration and behavior |
+| --- | --- | --- |
+| A: intra-module | CourseController -> CourseService | CourseModule provides CourseService. The controller receives it through its constructor and delegates list, lookup, and create operations. |
+| B: inter-module | EnrollmentService -> CourseService | CourseModule exports CourseService. EnrollmentModule imports CourseModule. Enrollment calls `getCourseById(courseId)` and includes its response. |
+| C: circular | EnrollmentService <-> NotificationService | Both modules import each other through `forwardRef()` and export their own services. Both constructors use `@Inject(forwardRef(() => OtherService))`. |
 
-## Stay in touch
+AppModule imports all three modules. Every service has `@Injectable()` and is
+registered only in its own module's providers array. Application code never
+constructs a service with `new`.
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+EnrollmentService looks up the course, then calls NotificationService to produce
+an enrollment confirmation. NotificationService calls
+`enrollmentService.getEnrollments()` during a check and includes that result
+with a check confirmation. The check reports the empty list required by the lab;
+it does not claim that a stored enrollment was found.
 
-## License
+### Why forwardRef() is needed
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+The enrollment and notification modules and services refer to each other.
+`forwardRef(() => OtherClass)` defers the class reference until Nest can resolve
+both sides of the cycle. It is used in both module imports and both service
+injections. Services call each other from methods after initialization; their
+constructors only receive dependencies.
+
+The PDF's page 6 bullet about EnrollmentModule exports conflicts with the code
+directly below it. This implementation follows that code: EnrollmentModule
+exports EnrollmentService, while NotificationModule exports NotificationService.
+
+## HTTP endpoints
+
+All request and response bodies below are JSON. POST requests use
+`Content-Type: application/json`. Nest's default response status is 200 for GET
+and 201 for POST.
+
+| Method | Route | Request body | Status |
+| --- | --- | --- | --- |
+| GET | `/course` | None | 200 |
+| GET | `/course/101` | None; `101` is supplied through `@Param('id')` | 200 |
+| POST | `/course` | `{"name":"NestJS","code":"CS301"}` | 201 |
+| GET | `/enrollment` | None | 200 |
+| POST | `/enrollment` | `{"studentName":"John Doe","courseId":"101"}` | 201 |
+| POST | `/notification/send` | `{"studentName":"John Doe","message":"Welcome!"}` | 201 |
+| POST | `/notification/check` | `{"studentName":"John Doe","courseId":"101"}` | 201 |
+
+All POST controllers use `@Body()` and delegate to the corresponding service.
+Any string course ID is echoed by the demonstration lookup.
+
+### GET /course
+
+```json
+{"message":"All courses fetched","data":[]}
+```
+
+### GET /course/101
+
+```json
+{"message":"Course fetched","id":"101"}
+```
+
+### POST /course
+
+For the request in the table:
+
+```json
+{"message":"Course created","data":{"name":"NestJS","code":"CS301"}}
+```
+
+### GET /enrollment
+
+```json
+{"message":"All enrollments fetched","data":[]}
+```
+
+### POST /enrollment
+
+```json
+{
+  "message": "Student enrolled successfully",
+  "student": "John Doe",
+  "course": {"message": "Course fetched", "id": "101"},
+  "notification": {
+    "message": "Notification sent successfully",
+    "student": "John Doe",
+    "content": "You have been enrolled in course 101."
+  }
+}
+```
+
+### POST /notification/send
+
+```json
+{
+  "message": "Notification sent successfully",
+  "student": "John Doe",
+  "content": "Welcome!"
+}
+```
+
+### POST /notification/check
+
+```json
+{
+  "message": "Enrollment check completed",
+  "student": "John Doe",
+  "courseId": "101",
+  "enrollments": {"message": "All enrollments fetched", "data": []},
+  "notification": {
+    "message": "Notification sent successfully",
+    "student": "John Doe",
+    "content": "Enrollment check completed for course 101."
+  }
+}
+```
+
+## Tests
+
+```powershell
+npm run build
+npm run test -- --runInBand
+npm run test:e2e -- --runInBand
+npm run lint
+```
+
+The 15 unit/controller tests verify service responses, controller delegation,
+injected response propagation, notification ordering, and the empty enrollment
+list. The nine Supertest tests boot the real AppModule on an ephemeral HTTP
+port, verify all seven routes, check shared providers across module boundaries
+in both directions, and confirm that create/enroll calls do not persist data.
+
+### Postman collection
+
+Import [the collection](postman/UniversitySystemAPI.postman_collection.json)
+into Postman. Set its `baseUrl` variable (default `http://localhost:3000`), start
+the API, and run all seven requests. Each request has a status assertion and a
+complete response-body assertion.
+
+The collection can also run with Newman, the Postman collection runner:
+
+```powershell
+npx --yes newman run postman/UniversitySystemAPI.postman_collection.json
+```
+
+For a custom port:
+
+```powershell
+npx --yes newman run postman/UniversitySystemAPI.postman_collection.json --env-var baseUrl=http://127.0.0.1:3103
+```
+
+Newman is optional and is not a project dependency. The collection was actually
+executed with Newman 6.2.3 against the compiled API: seven requests and 14
+assertions passed. The Postman desktop UI was not used.
+
+See [VERIFICATION.md](VERIFICATION.md) for the requirement checklist and results.
