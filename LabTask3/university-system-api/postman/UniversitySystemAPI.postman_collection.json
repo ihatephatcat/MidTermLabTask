@@ -1,0 +1,299 @@
+{
+  "info": {
+    "name": "UniversitySystemAPI - Lab Task 03",
+    "description": "Seven required routes covering intra-module, inter-module, and circular dependency injection. Notifications are returned objects; course and enrollment lists remain empty.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Get all courses",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/course",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "course"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Response matches the required result\", function () {",
+              "  pm.expect(pm.response.json()).to.deep.equal({\"message\":\"All courses fetched\",\"data\":[]});",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get course by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/course/101",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "course",
+            "101"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Response matches the required result\", function () {",
+              "  pm.expect(pm.response.json()).to.deep.equal({\"message\":\"Course fetched\",\"id\":\"101\"});",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create course",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/course",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "course"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"NestJS\",\n  \"code\": \"CS301\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "pm.test(\"Response matches the required result\", function () {",
+              "  pm.expect(pm.response.json()).to.deep.equal({\"message\":\"Course created\",\"data\":{\"name\":\"NestJS\",\"code\":\"CS301\"}});",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get all enrollments",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/enrollment",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "enrollment"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 200\", function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Response matches the required result\", function () {",
+              "  pm.expect(pm.response.json()).to.deep.equal({\"message\":\"All enrollments fetched\",\"data\":[]});",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Enroll student",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/enrollment",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "enrollment"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentName\": \"John Doe\",\n  \"courseId\": \"101\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "pm.test(\"Response matches the required result\", function () {",
+              "  pm.expect(pm.response.json()).to.deep.equal({\"message\":\"Student enrolled successfully\",\"student\":\"John Doe\",\"course\":{\"message\":\"Course fetched\",\"id\":\"101\"},\"notification\":{\"message\":\"Notification sent successfully\",\"student\":\"John Doe\",\"content\":\"You have been enrolled in course 101.\"}});",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Send notification",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/notification/send",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "notification",
+            "send"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentName\": \"John Doe\",\n  \"message\": \"Welcome!\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "pm.test(\"Response matches the required result\", function () {",
+              "  pm.expect(pm.response.json()).to.deep.equal({\"message\":\"Notification sent successfully\",\"student\":\"John Doe\",\"content\":\"Welcome!\"});",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Check enrollment and notify",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/notification/check",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "notification",
+            "check"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"studentName\": \"John Doe\",\n  \"courseId\": \"101\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"HTTP 201\", function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "pm.test(\"Response matches the required result\", function () {",
+              "  pm.expect(pm.response.json()).to.deep.equal({\"message\":\"Enrollment check completed\",\"student\":\"John Doe\",\"courseId\":\"101\",\"enrollments\":{\"message\":\"All enrollments fetched\",\"data\":[]},\"notification\":{\"message\":\"Notification sent successfully\",\"student\":\"John Doe\",\"content\":\"Enrollment check completed for course 101.\"}});",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

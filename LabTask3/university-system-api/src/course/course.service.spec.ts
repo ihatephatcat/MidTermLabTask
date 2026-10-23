@@ -12,7 +12,24 @@ describe('CourseService', () => {
     service = module.get<CourseService>(CourseService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it('returns the required empty course list', () => {
+    expect(service.getAllCourses()).toEqual({
+      message: 'All courses fetched',
+      data: [],
+    });
+  });
+
+  it('returns the supplied course ID', () => {
+    expect(service.getCourseById('CS-202')).toEqual({
+      message: 'Course fetched',
+      id: 'CS-202',
+    });
+  });
+
+  it('returns the supplied course name and code', () => {
+    expect(service.createCourse('NestJS', 'CS301')).toEqual({
+      message: 'Course created',
+      data: { name: 'NestJS', code: 'CS301' },
+    });
   });
 });
