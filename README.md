@@ -4,11 +4,11 @@ Midterm lab tasks for Advanced Programming with Web Technology (AWT).
 
 ## Lab Tasks
 
-| Lab Task    | Project                    | Technology         |
-| ----------- | -------------------------- | ------------------ |
-| Lab Task 01 | Course Management REST API | NestJS, TypeScript |
-| Lab Task 02 | Course Validation and Material Upload API | NestJS, DTOs, Multer |
-| Lab Task 03 | University System API | NestJS, Dependency Injection, forwardRef |
+| Lab Task    | Project                                   | Technology                               |
+| ----------- | ----------------------------------------- | ---------------------------------------- |
+| Lab Task 01 | Course Management REST API                | NestJS, TypeScript                       |
+| Lab Task 02 | Course Validation and Material Upload API | NestJS, DTOs, Multer                     |
+| Lab Task 03 | University System API                     | NestJS, Dependency Injection, forwardRef |
 
 ## Repository Structure
 
@@ -53,3 +53,19 @@ Supertest tests, and a Postman collection verified with Newman.
 
 See [Lab Task 03 instructions](LabTask3/university-system-api/README.md) and
 [verification results](LabTask3/university-system-api/VERIFICATION.md).
+
+## Lab Task 04 — Product Inventory API
+
+A RESTful Product Inventory API using NestJS, TypeORM, and PostgreSQL.
+
+**Features:**
+
+- CRUD operations with PostgreSQL
+- DTO validation using class-validator
+- Product search and category filtering
+- PUT and PATCH operations
+- Active/inactive product status
+- 9 API endpoints
+- 23 passing automated tests
+
+[View Lab Task 04](LabTask4/product-inventory-api/README.md)
