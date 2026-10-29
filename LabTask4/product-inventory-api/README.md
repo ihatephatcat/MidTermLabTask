@@ -1,98 +1,187 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Lab Task 04 — Product Inventory API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+**Course:** Advanced Programming with Web Technology (AWT)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Overview
 
-## Description
+A RESTful Product Inventory API developed using NestJS, TypeORM, and PostgreSQL.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+The application demonstrates CRUD operations on a single Products entity, DTO validation, database repositories, category filtering, product searching, and active/inactive status management.
 
-## Project setup
+## Technologies
 
-```bash
-$ npm install
+- NestJS
+- TypeScript
+- PostgreSQL
+- TypeORM
+- class-validator and class-transformer
+- Jest
+- Postman
+
+## Project Structure
+
+```text
+src/
+├── products/
+│   ├── dto/
+│   │   ├── create-product.dto.ts
+│   │   ├── update-product.dto.ts
+│   │   └── partial-update-product.dto.ts
+│   ├── entities/
+│   │   └── products.entity.ts
+│   ├── products.controller.ts
+│   ├── products.service.ts
+│   └── products.module.ts
+├── app.module.ts
+└── main.ts
 ```
 
-## Compile and run the project
+## Database
 
-```bash
-# development
-$ npm run start
+Database name: `product_inventory_db`
 
-# watch mode
-$ npm run start:dev
+The Products entity contains nine columns:
 
-# production mode
-$ npm run start:prod
+| Column      | Description                 |
+| ----------- | --------------------------- |
+| id          | Auto-generated primary key  |
+| name        | Product name                |
+| description | Optional description        |
+| price       | Decimal price               |
+| stock       | Available quantity          |
+| category    | Product category            |
+| isActive    | Active/inactive status      |
+| createdAt   | Creation timestamp          |
+| updatedAt   | Last modification timestamp |
+
+All database operations use TypeORM repositories.
+
+No entity relationships are implemented.
+
+## API Endpoints
+
+| Method | Endpoint                         | Description                 |
+| ------ | -------------------------------- | --------------------------- |
+| POST   | `/products`                      | Create a product            |
+| GET    | `/products`                      | Get all products            |
+| GET    | `/products/:id`                  | Get product by ID           |
+| PATCH  | `/products/:id`                  | Partially update product    |
+| PUT    | `/products/:id`                  | Replace product information |
+| DELETE | `/products/:id`                  | Delete product              |
+| GET    | `/products/category/:cat`        | Filter products by category |
+| GET    | `/products/search?keyword=phone` | Search products by name     |
+| PATCH  | `/products/:id/toggle`           | Toggle product status       |
+
+## Example Request
+
+**POST `/products`**
+
+```json
+{
+  "name": "iPhone 15",
+  "price": 999.99,
+  "stock": 50,
+  "category": "Electronics"
+}
 ```
 
-## Run tests
+The API returns a structured JSON response containing the saved product, generated ID, and timestamps.
+
+## DTO Validation
+
+Global ValidationPipe is configured with:
+
+- `whitelist: true`
+- `forbidNonWhitelisted: true`
+- `transform: true`
+
+Validation includes required fields, data types, positive prices, non-negative stock quantities, and rejection of unknown properties.
+
+`UpdateProductDto` inherits CreateProductDto for PUT operations.
+
+`PartialUpdateProductDto` uses `PartialType()` for PATCH operations.
+
+## Installation
+
+Install dependencies:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Deployment
+Create the PostgreSQL database:
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+```sql
+CREATE DATABASE product_inventory_db;
+```
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Create a `.env` file in the project root:
+
+```dotenv
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=your_password
+DB_NAME=product_inventory_db
+```
+
+Replace `your_password` with your local PostgreSQL password.
+
+The `.env` file is excluded from Git.
+
+## Running the Application
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+The default port is 3000.
 
-## Resources
+To use port 3001 in PowerShell:
 
-Check out a few resources that may come in handy when working with NestJS:
+```powershell
+$env:PORT = "3001"
+npm run start:dev
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## Testing
 
-## Support
+Run the unit tests:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```powershell
+$env:NODE_OPTIONS = "--experimental-vm-modules"
+npm run test -- --runInBand
+```
 
-## Stay in touch
+Verify the build:
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+npm run build
+```
 
-## License
+Run ESLint:
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```bash
+npm run lint
+```
+
+### Verification Results
+
+- 23 unit tests passed.
+- 3 test suites passed.
+- TypeScript compilation successful.
+- ESLint passed without errors.
+- All nine API endpoints tested manually using Postman.
+- PostgreSQL CRUD operations verified.
+- DTO validation and 404 error handling verified.
+
+## Notes
+
+- This assignment uses a single database entity.
+- No authentication or entity relationships are required.
+- `synchronize: true` is used for local development only.
+- All database operations are handled by ProductsService.
+
+## Repository
+
+[MidTermLabTask](https://github.com/ihatephatcat/MidTermLabTask)
